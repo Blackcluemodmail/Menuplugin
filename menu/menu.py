@@ -35,13 +35,12 @@ class Menu(commands.Cog):
             for r in menu_config['options']:
                 await main_recipient_msg.add_reaction(r)
                 await asyncio.sleep(0.3)
-
-            re = menu_config.get("reaction-emojis")
-            if re:
-                for r in re.get("emoji", []):
-                    await main_recipient_msg.add_reaction(
-                        discord.utils.get(message.guild.emoji, id=r)
-                    )
+                re = menu_config.get("reaction-emojis")
+                if re:
+                    for r in re.get("emoji", []):
+                        await main_recipient_msg.add_reaction(
+                            discord.utils.get(message.guild.emoji, id=r)
+                        )
 
             try:
                 reaction, _ = await self.bot.wait_for('reaction_add', check=lambda r, u: r.message == main_recipient_msg and u == thread.recipient and str(r.emoji) in menu_config['options'], timeout=120)
