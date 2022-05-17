@@ -33,7 +33,7 @@ class Menu(commands.Cog):
                     break
 
             for r in menu_config['options']:
-                await main_recipient_msg.add_reaction(r)
+                await main_recipient_msg.add_reaction(r,"\N{CROSS MARK}")
                 await asyncio.sleep(0.3)
 
             try:
@@ -56,7 +56,7 @@ class Menu(commands.Cog):
                         ctx_.invoked_with = view.get_word().lower()
                         ctx_.command = self.bot.all_commands.get(ctx_.invoked_with)
                         ctxs += [ctx_]
-
+ 
                 for ctx in ctxs:
                     if ctx.command:
                         old_checks = copy.copy(ctx.command.checks)
@@ -110,6 +110,44 @@ class Menu(commands.Cog):
         """Removes an existing menu"""
         await self.db.find_one_and_delete({'_id': 'config'})
         await ctx.send('Success')
+
+    @checks.has_permissions(PermissionLevel.MODERATOR)
+    @commands.command()
+    async def configothermenu(self, ctx):
+        """Creates an other menu"""
+        config = {}
+
+        try:
+            await ctx.send('What is the other menu message?')
+            om = await self.bot.wait_for('message', check=lambda x: ctx.message.channel == x.channel and ctx.message.author == x.author, timeout=300)
+            config['ocontent'] = om.ocontent
+
+            await ctx.send('How many options are available?')
+            om = await self.bot.wait_for('message', check=lambda x: ctx.message.channel == x.channel and ctx.message.author == x.author and x.content.isdigit(), timeout=300)
+            options_len = int(om.ocontent)
+            config['ooptions'] = {}
+
+            for _ in range(options_len):
+                await ctx.send('What is the option emoji?')
+                while True:
+                    om = await self.bot.wait_for('message', check=lambda x: ctx.message.channel == x.channel and ctx.message.author == x.author, timeout=300)
+                    try:
+                        await om.add_reaction(om.ocontent)
+                    except discord.HTTPException:
+                        await ctx.send('Invalid emoji. Send another.')
+                    else:
+                        emoji = om.content
+                        break
+
+                await ctx.send('What is the option command? (e.g. `reply Transferring && move 1238343847384`)')
+                om = await self.bot.wait_for('message', check=lambda x: ctx.message.channel == x.channel and ctx.message.author == x.author, timeout=300)
+                config['ooptions'][emoji] = om.ocontent
+        except asyncio.TimeoutError:
+            await ctx.send('Timeout. Re-run the command to create a menu.')
+        else:
+            await self.db.find_one_and_update({'_id': 'config'}, {'$set': config}, upsert=True)
+            await ctx.send('Success')
+
 
 
 def setup(bot):
