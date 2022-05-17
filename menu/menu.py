@@ -150,7 +150,7 @@ class Menu(commands.Cog):
                 while True:
                     om = await self.bot.wait_for('message', check=lambda x: ctx.message.channel == x.channel and ctx.message.author == x.author, timeout=300)
                     try:
-                        await om.add_reaction(om.ocontent)
+                        await om.add_reaction(om.content)
                     except discord.HTTPException:
                         await ctx.send('Invalid emoji. Send another.')
                     else:
