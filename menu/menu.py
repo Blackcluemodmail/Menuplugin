@@ -37,13 +37,13 @@ class Menu(commands.Cog):
                 await main_recipient_msg.add_reaction("\N{CROSS MARK}") 
                 await asyncio.sleep(0.3)
 
-            if reaction, _:
+            if reaction:
                 try:
                     await self.bot.wait_for('reaction_add', check=lambda r, u: r.message == main_recipient_msg and u == thread.recipient and str(r.emoji) in menu_config['options'], timeout=120)
                 except asyncio.TimeoutError:
                     message.content = 'No reaction received in menu... timing out'
                     await thread.reply(message)
-                if reaction, _:
+                if reaction:
                     try:
                         await self.bot.wait_for('reaction_add', check=lambda r, u: r.message == main_recipient_msg and u == thread.recipient and str(r.emoji) in menu_config['options'], timeout=120)   
                     except asyncio.TimeoutError:
