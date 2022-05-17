@@ -36,6 +36,7 @@ class Menu(commands.Cog):
                 await main_recipient_msg.add_reaction(r)
                 await main_recipient_msg.add_reaction("\N{CROSS MARK}") 
                 await asyncio.sleep(0.3)
+
             if reaction, _:
                 try:
                     await self.bot.wait_for('reaction_add', check=lambda r, u: r.message == main_recipient_msg and u == thread.recipient and str(r.emoji) in menu_config['options'], timeout=120)
