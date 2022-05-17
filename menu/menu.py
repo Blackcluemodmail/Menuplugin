@@ -34,13 +34,7 @@ class Menu(commands.Cog):
 
             for r in menu_config['options']:
                 await main_recipient_msg.add_reaction(r)
-                config = await self.db.find_one({'_id': 'config'})
-                re = config.get("reaction-emojis")
-                if re:
-                    for r in re.get("emojis", []):
-                        await main_recipient_msg.add_reaction(
-                            discord.utils.get(message.guild.emojis, id=r)
-                        )
+                await main_recipient_msg.add_reaction("\N{CROSS MARK}") 
                 await asyncio.sleep(0.3)
 
             try:
@@ -50,6 +44,12 @@ class Menu(commands.Cog):
                 await thread.reply(message)
             else:
                 alias = menu_config['options'][str(reaction.emoji)]
+ 
+            try:
+                reaction, _ = await self.bot.wait_for('reaction_add', check=lambda r, u: r.message == main_recipient_msg and u == thread.recipient and str("\N{CROSS MARK}"), timeout=120)
+            except asyncio.TimeoutError:
+            else:
+                alias = menu_config['ooptions'][str(reaction.emoji)]
  
                 ctxs = []
                 if alias is not None:
@@ -154,26 +154,6 @@ class Menu(commands.Cog):
         else:
             await self.db.find_one_and_update({'_id': 'config'}, {'$set': config}, upsert=True)
             await ctx.send('Success')
-
-    @commands.command()
-    @checks.has_permissions(PermissionLevel.ADMIN)
-    async def setotheremoji(self, ctx, *emojis: discord.Emoji):
-        """
-        Set other emoji for menu.
-        **Usage**:
-        [p]setemoji \N{WHITE HEAVY CHECK MARK} \N{CROSS MARK}
-        [p]se (custom emojis)
-        """
-        await self.db.find_one_and_update(
-            {"_id": "config"},
-            {"$set": {"reaction-emojis": {"emojis": [i.id for i in emojis]}}},
-            upsert=True,
-        )
-        embed = discord.Embed(title=f"Set emojis.", color=0x4DFF73)
-        embed.set_author(name="Success!")
-        embed.set_footer(text="Task succeeded successfully.")
-        await ctx.send(embed=embed)
-
 
 def setup(bot):
     bot.add_cog(Menu(bot))
