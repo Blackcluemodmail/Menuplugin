@@ -46,9 +46,7 @@ class Menu(commands.Cog):
                 alias = menu_config['options'][str(reaction.emoji)]
  
             try:
-                reaction, _ = await self.bot.wait_for('reaction_add', check=lambda r, u: r.message == main_recipient_msg and u == thread.recipient and str("\N{CROSS MARK}"), timeout=120)
-            except asyncio.TimeoutError:
-                break
+                reaction, _ = await self.bot.wait_for('reaction_add', check=lambda r, u: r.message == main_recipient_msg and u == thread.recipient and str("\N{CROSS MARK}"), timeout=120)   
             else:
                 alias = menu_config['ooptions'][str(reaction.emoji)]
  
