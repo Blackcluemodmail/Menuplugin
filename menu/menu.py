@@ -36,19 +36,19 @@ class Menu(commands.Cog):
                 await main_recipient_msg.add_reaction(r)
                 await main_recipient_msg.add_reaction("\N{CROSS MARK}") 
                 await asyncio.sleep(0.3)
-
-            try:
-                reaction, _ = await self.bot.wait_for('reaction_add', check=lambda r, u: r.message == main_recipient_msg and u == thread.recipient and str(r.emoji) in menu_config['options'], timeout=120)
-            except asyncio.TimeoutError:
-                message.content = 'No reaction received in menu... timing out'
-                await thread.reply(message)
-
+            if reaction, _:
                 try:
-                    reaction, _ = await self.bot.wait_for('reaction_add', check=lambda r, u: r.message == main_recipient_msg and u == thread.recipient and str(r.emoji) in menu_config['options'], timeout=120)   
+                    await self.bot.wait_for('reaction_add', check=lambda r, u: r.message == main_recipient_msg and u == thread.recipient and str(r.emoji) in menu_config['options'], timeout=120)
                 except asyncio.TimeoutError:
                     message.content = 'No reaction received in menu... timing out'
-                else:
-                    alias = menu_config['ooptions'][str(reaction.emoji)]
+                    await thread.reply(message)
+                if reaction, _:
+                    try:
+                        await self.bot.wait_for('reaction_add', check=lambda r, u: r.message == main_recipient_msg and u == thread.recipient and str(r.emoji) in menu_config['options'], timeout=120)   
+                    except asyncio.TimeoutError:
+                        message.content = 'No reaction received in menu... timing out'
+                    else:
+                        alias = menu_config['ooptions'][str(reaction.emoji)]
             else:
                 alias = menu_config['options'][str(reaction.emoji)]
 
