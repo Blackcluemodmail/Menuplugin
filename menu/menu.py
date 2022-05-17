@@ -39,7 +39,7 @@ class Menu(commands.Cog):
                 if re:
                     for r in re.get("emojis", []):
                         await main_recipient_msg.add_reaction(
-                            discord.utils.get(message.guild.emoji, id=r)
+                            discord.utils.get(message.guild.emojis, id=r)
                         )
                 await asyncio.sleep(0.3)
 
