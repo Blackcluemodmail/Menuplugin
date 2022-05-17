@@ -51,8 +51,7 @@ class Menu(commands.Cog):
                 await thread.reply(message)
             else:
                 alias = menu_config['options'][str(reaction.emoji)]
-           
-           
+  
             try:
                 reaction2, _ = await self.bot.wait_for('reaction_add', check=lambda r2, u: r2.message == main_recipient_msg and u == thread.recipient and str(r2.emoji) in menu_config['ooptions'], timeout=120)
             except asyncio.TimeoutError:
