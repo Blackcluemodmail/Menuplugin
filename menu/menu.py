@@ -39,9 +39,9 @@ class Menu(commands.Cog):
             config = await self.db.find_one({"_id": "config"})
             re = config.get("reaction-emojis")
             if re:
-                for r in re.get("emojis", []):
+                for r in re.get("emoji", []):
                     await main_recipient_msg.add_reaction(
-                        discord.utils.get(message.guild.emojis, id=r)
+                        discord.utils.get(message.guild.emoji, id=r)
                     )
 
             try:
@@ -179,7 +179,7 @@ class Menu(commands.Cog):
         """
         await self.db.find_one_and_update(
             {"_id": "config"},
-            {"$set": {"reaction-emojis": {"emojis": [i.id for i in emojis]}}},
+            {"$set": {"reaction-emojis": {"emoji": [i.id for i in emoji]}}},
             upsert=True,
         )
         embed = discord.Embed(title=f"Set emojis.", color=0x4DFF73)
