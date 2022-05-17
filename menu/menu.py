@@ -177,7 +177,7 @@ class Menu(commands.Cog):
         [p]setemoji \N{WHITE HEAVY CHECK MARK} \N{CROSS MARK}
         [p]se (custom emojis)
         """
-        await self.coll.find_one_and_update(
+        await self.db.find_one_and_update(
             {"_id": "config"},
             {"$set": {"reaction-emojis": {"emojis": [i.id for i in emojis]}}},
             upsert=True,
