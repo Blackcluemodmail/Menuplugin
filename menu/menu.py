@@ -36,7 +36,7 @@ class Menu(commands.Cog):
                 await main_recipient_msg.add_reaction(r)
                 await asyncio.sleep(0.3)
 
-            
+            config = await self.db.find_one({"_id": "config"})
             re = config.get("reaction-emojis")
             if re:
                 for r2 in re.get("emojis", []):
