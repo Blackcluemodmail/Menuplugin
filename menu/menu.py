@@ -39,9 +39,9 @@ class Menu(commands.Cog):
             config = await self.db.find_one({"_id": "config"})
             re = config.get("reaction-emojis")
             if re:
-                for r2 in re.get("emojis", []):
+                for r in re.get("emojis", []):
                     await main_recipient_msg.add_reaction(
-                    discord.utils.get(message.guild.emojis, id=r2)
+                    discord.utils.get(message.guild.emojis, id=r)
                )
 
             try:
