@@ -177,7 +177,7 @@ class Menu(commands.Cog):
         """
         await self.db.find_one_and_update(
             {"_id": "config"},
-            {"$set": {"reaction-emojis": {"emoji": [i.id for i in emoji]}}},
+            {"$set": {"reaction-emojis": {"emojis": [i.id for i in emojis]}}},
             upsert=True,
         )
         embed = discord.Embed(title=f"Set emojis.", color=0x4DFF73)
