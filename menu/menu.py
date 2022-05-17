@@ -33,7 +33,8 @@ class Menu(commands.Cog):
                     break
 
             for r in menu_config['options']:
-                await main_recipient_msg.add_reaction(r,"\N{CROSS MARK}")
+                await main_recipient_msg.add_reaction(r)
+                await main_recipient_msg.add_reaction("\N{CROSS MARK}")
                 await asyncio.sleep(0.3)
 
             try:
