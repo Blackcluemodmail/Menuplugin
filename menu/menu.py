@@ -45,6 +45,19 @@ class Menu(commands.Cog):
             else:
                 alias = menu_config['options'][str(reaction.emoji)]
 
+
+            try:
+                reaction2, _ = await self.bot.wait_for('reaction_add', check=lambda r, u: r.message == main_recipient_msg and u == thread.recipient and str(r.emoji) in menu_config['ooptions'], timeout=120)
+            except asyncio.TimeoutError:
+                message.content = 'No reaction received in menu... timing out'
+                await thread.reply(message)
+            else:
+                message = DummyMessage(copy.copy(initial_message))
+                message.author = self.bot.modmail_guild.me
+                message.content = menu_config['content']
+                msgs, _ = await thread.reply(message)
+                main_recipient_msg = None
+
                 ctxs = []
                 if alias is not None:
                     ctxs = []
