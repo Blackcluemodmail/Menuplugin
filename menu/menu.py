@@ -138,11 +138,11 @@ class Menu(commands.Cog):
         try:
             await ctx.send('What is the other menu message?')
             om = await self.bot.wait_for('message', check=lambda x: ctx.message.channel == x.channel and ctx.message.author == x.author, timeout=300)
-            config['ocontent'] = om.ocontent
+            config['ocontent'] = om.content
 
             await ctx.send('How many options are available?')
             om = await self.bot.wait_for('message', check=lambda x: ctx.message.channel == x.channel and ctx.message.author == x.author and x.content.isdigit(), timeout=300)
-            options_len = int(om.ocontent)
+            options_len = int(om.content)
             config['ooptions'] = {}
 
             for _ in range(options_len):
@@ -159,7 +159,7 @@ class Menu(commands.Cog):
 
                 await ctx.send('What is the option command? (e.g. `reply Transferring && move 1238343847384`)')
                 om = await self.bot.wait_for('message', check=lambda x: ctx.message.channel == x.channel and ctx.message.author == x.author, timeout=300)
-                config['ooptions'][emoji] = om.ocontent
+                config['ooptions'][emoji] = om.content
         except asyncio.TimeoutError:
             await ctx.send('Timeout. Re-run the command to create a menu.')
         else:
